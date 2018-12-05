@@ -25,7 +25,7 @@ function generateRandomString(urlToConvert) {
 };
 
 app.get('/', (req, res) => {
-  res.send('Hello!');
+  res.redirect('/urls');
 });
 
 app.get('/urls', (req, res) => {
@@ -45,6 +45,7 @@ app.post('/urls', (req, res) => {
 
 app.get('/urls/:id', (req, res) => {
   const templateVars = {
+    username: req.cookies['username'],
     shortURL: req.params.id,
     longURL: urlDatabase
   };
@@ -64,6 +65,11 @@ app.post('/urls/:id/delete', (req, res) => {
   res.redirect('/urls');
 });
 
+app.post('/login', (req, res) => {
+  const userCreds = req.body.userCreds;
+  res.cookie('username', userCreds).redirect('/urls');
+});
+
 app.get('/u/:shortURL', (req, res) => {
   const longURL = urlDatabase[req.params.shortURL];
   res.redirect(longURL);
@@ -71,10 +77,6 @@ app.get('/u/:shortURL', (req, res) => {
 
 app.get('/urls.json', (req, res) => {
   res.json(urlDatabase);
-});
-
-app.get('/hello', (req, res) => {
-  res.send('<html><body>Hello <b>World</b></body></html>\n');
 });
 
 app.listen(PORT, () => {
