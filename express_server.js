@@ -10,6 +10,7 @@ const urlDatabase = {
   'b2xVn2': 'http://www.lighthouselabs.ca',
   '9sm5xK': 'http://www.google.com'
 };
+// console.log(urlDatabase);
 
 function generateRandomString(urlToConvert) {
   const randomText = '';
@@ -48,6 +49,21 @@ app.get('/urls/:id', (req, res) => {
     longURL: urlDatabase
   };
   res.render('urls_show', templateVars);
+});
+
+app.post('/urls/:id', (req, res) => {
+  const templateVars = {
+    shortURL: req.params.id,
+    longURL: urlDatabase
+  };
+  console.log(templateVars);
+  res.redirect('urls_show');
+});
+
+app.post('/urls/:id/delete', (req, res) => {
+  const shortURL = req.params.id;
+  delete urlDatabase[shortURL];
+  res.redirect('/urls');
 });
 
 app.get('/u/:shortURL', (req, res) => {

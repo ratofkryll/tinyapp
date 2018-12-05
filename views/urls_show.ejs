@@ -5,11 +5,13 @@
 </head>
 <body>
   <% include partials/_header %>
-  <h1>Show URLs</h1>
-  <ul>
+
   <% if (longURL[shortURL]) { %>
-    <li><%= `${longURL[shortURL]}: ${shortURL}` %></li>
+    <h2>ShortURL: <%= shortURL %></h2>
+    <form method="POST" action="urls/<%= shortURL %>">
+      <input type="text" value="<%= longURL[shortURL] %>" size="35">
+      <button type="submit">Update</button>
+    </form>
   <% } %>
-  </ul>
 </body>
 </html>
