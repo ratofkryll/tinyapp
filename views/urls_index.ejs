@@ -6,8 +6,13 @@
 <body>
   <% include partials/_header %>
   <ul>
-    <% for (var url in urls) { %>
-      <li><%= `${url} | ${urls[url]}` %></li>
+    <% for (let url in urls) { %>
+      <li>
+        <%= `${url} | ${urls[url]}` %>
+        <form method="POST" action="/urls/<%= url %>/delete">
+          <button type="submit">Delete</button>
+        </form>
+      </li>
     <% } %>
     </ul>
 </body>
