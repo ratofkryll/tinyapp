@@ -52,12 +52,10 @@ app.get('/urls/:id', (req, res) => {
 });
 
 app.post('/urls/:id', (req, res) => {
-  const templateVars = {
-    shortURL: req.params.id,
-    longURL: urlDatabase
-  };
-  console.log(templateVars);
-  res.redirect('urls_show');
+  const shortURL = req.params.id;
+  const longURL = urlDatabase[shortURL];
+  urlDatabase[shortURL] = req.body.newURL;
+  res.redirect(shortURL);
 });
 
 app.post('/urls/:id/delete', (req, res) => {
