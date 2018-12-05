@@ -21,8 +21,6 @@ function generateRandomString(urlToConvert) {
   return randomText;
 };
 
-console.log(generateRandomString('http://www.facebook.com'));
-
 app.get('/', (req, res) => {
   res.send('Hello!');
 });
@@ -37,8 +35,11 @@ app.get('/urls/new', (req, res) => {
 });
 
 app.post('/urls', (req, res) => {
-  console.log(req.body);
-  res.send('OK');
+  let shortURL = generateRandomString(req.body.longURL)
+  urlDatabase[shortURL] = req.body.longURL;
+  console.log(urlDatabase);
+  console.log(shortURL);
+  res.redirect(`/urls/${shortURL}`);
 });
 
 app.get('/urls/:id', (req, res) => {
@@ -47,6 +48,11 @@ app.get('/urls/:id', (req, res) => {
     longURL: urlDatabase
   };
   res.render('urls_show', templateVars);
+});
+
+app.get('/u/:shortURL', (req, res) => {
+  let longURL = urlDatabase[req.params.shortURL];
+  res.redirect(longURL);
 });
 
 app.get('/urls.json', (req, res) => {
