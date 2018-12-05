@@ -38,8 +38,6 @@ app.get('/urls/new', (req, res) => {
 app.post('/urls', (req, res) => {
   const shortURL = generateRandomString(req.body.longURL)
   urlDatabase[shortURL] = req.body.longURL;
-  console.log(urlDatabase);
-  console.log(shortURL);
   res.redirect(`/urls/${shortURL}`);
 });
 
@@ -78,5 +76,5 @@ app.get('/hello', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Example app listening on port ${PORT}!`);
+  console.log(`TinyApp listening on port ${PORT}!`);
 });
