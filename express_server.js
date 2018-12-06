@@ -86,7 +86,6 @@ app.post('/login', (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   let userID = '';
-
   function checkPasswords(password) {
     for (let key in users) {
       if (password === users[key].password) {
@@ -96,16 +95,13 @@ app.post('/login', (req, res) => {
     }
     return false;
   }
-
   if (checkEmails(email) === true && checkPasswords(password) === true) {
     console.log(userID);
     res.cookie('user_id', users[userID]).redirect('/urls');
   } else {
     console.log('Boo!');
-    res.redirect('/urls');
+    res.send('Username or password incorrect.');
   }
-
-
 });
 
 app.post('/logout', (req, res) => {
@@ -139,7 +135,7 @@ app.post('/urls', (req, res) => {
 // Display shortened URL page
 app.get('/urls/:id', (req, res) => {
   const templateVars = {
-    username: req.cookies['user_id'],
+    user_id: req.cookies['user_id'],
     shortURL: req.params.id,
     longURL: urlDatabase
   };
@@ -149,7 +145,7 @@ app.get('/urls/:id', (req, res) => {
 // Edit original URL for shortened URL
 app.post('/urls/:id', (req, res) => {
   const templateVars = {
-    username: req.cookies['user_id'],
+    user_id: req.cookies['user_id'],
     shortURL: req.params.id,
     longURL: urlDatabase[shortURL]
   }
