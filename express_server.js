@@ -8,6 +8,21 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 
+const users = {
+  user1id: {
+    id: 'user1id',
+    email: 'user1@email.com',
+    password: 'password'
+  },
+  user2id: {
+    id: 'user2id',
+    email: 'user2@email.com',
+    password: 'pass'
+  }
+}
+
+console.log(users);
+
 const urlDatabase = {
   'b2xVn2': 'http://www.lighthouselabs.ca',
   '9sm5xK': 'http://www.google.com'
@@ -28,7 +43,21 @@ app.get('/', (req, res) => {
   res.redirect('/urls');
 });
 
-// Login & logout
+// Register, login & logout
+app.get('/register', (req, res) => {
+  const templateVars = {
+    username: req.cookies['username'],
+  };
+  res.render('register', templateVars);
+});
+
+app.post('/register', (req, res) => {
+  let userID = generateRandomString(req.body.email);
+  users[userID] = {id: userID, email: req.body.email, password: req.body.password};
+  console.log(users);
+  res.cookie('user_id', users[userID].id).redirect('/');
+});
+
 app.post('/login', (req, res) => {
   const userCreds = req.body.userCreds;
   res.cookie('username', userCreds).redirect('/urls');

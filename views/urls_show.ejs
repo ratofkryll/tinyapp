@@ -9,7 +9,7 @@
   <% if (longURL[shortURL]) { %>
     <h2>ShortURL: <%= shortURL %></h2>
     <form method="POST" action="<%= shortURL %>">
-      <input id="newURL" type="text" name="newURL" value="<%= longURL[shortURL] %>" size="35">
+      <input type="text" name="newURL" value="<%= longURL[shortURL] %>" size="35">
       <button type="submit">Update</button>
     </form>
   <% } %>
