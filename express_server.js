@@ -21,8 +21,6 @@ const users = {
   }
 }
 
-console.log(users);
-
 const urlDatabase = {
   'b2xVn2': 'http://www.lighthouselabs.ca',
   '9sm5xK': 'http://www.google.com'
@@ -96,10 +94,8 @@ app.post('/login', (req, res) => {
     return false;
   }
   if (checkEmails(email) === true && checkPasswords(password) === true) {
-    console.log(userID);
     res.cookie('user_id', users[userID]).redirect('/urls');
   } else {
-    console.log('Boo!');
     res.send('Username or password incorrect.');
   }
 });
@@ -123,7 +119,11 @@ app.get('/urls/new', (req, res) => {
   const templateVars = {
     user_id: req.cookies['user_id']
   };
-  res.render('urls_new', templateVars);
+  if (templateVars.user_id) {
+    res.render('urls_new', templateVars);
+  } else {
+    res.redirect('register');
+  }
 });
 
 app.post('/urls', (req, res) => {
