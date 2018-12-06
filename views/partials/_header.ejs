@@ -1,6 +1,16 @@
 <h1>TinyApp</h1>
 
+<nav>
+  <ul>
+    <li><a href="/urls">TinyURLs</a></li>
+    <% if (username) { %>
+    <li><a href="/urls/new">New TinyURL</a></li>
+    <% } %>
+  </ul>
+</nav>
+
 <% if (username) { %>
+  <!-- <p><a href="/urls/new">New TinyURL</a></p> -->
   <form method="POST" action="/logout">
     <span><%= username %></span>
     <button type="submit">Logout</button>

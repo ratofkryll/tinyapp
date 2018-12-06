@@ -12,7 +12,6 @@ const urlDatabase = {
   'b2xVn2': 'http://www.lighthouselabs.ca',
   '9sm5xK': 'http://www.google.com'
 };
-// console.log(urlDatabase);
 
 function generateRandomString(urlToConvert) {
   let randomText = '';
@@ -24,10 +23,12 @@ function generateRandomString(urlToConvert) {
   return randomText;
 };
 
+// Root dir (for now redirecting to /urls)
 app.get('/', (req, res) => {
   res.redirect('/urls');
 });
 
+// Login & logout
 app.post('/login', (req, res) => {
   const userCreds = req.body.userCreds;
   res.cookie('username', userCreds).redirect('/urls');
@@ -38,6 +39,7 @@ app.post('/logout', (req, res) => {
   res.clearCookie('username').redirect('/urls');
 });
 
+// Display /urls
 app.get('/urls', (req, res) => {
   const templateVars = {
     username: req.cookies['username'],
@@ -46,6 +48,7 @@ app.get('/urls', (req, res) => {
   res.render('urls_index', templateVars);
 });
 
+// Add new URL to urlDatabase
 app.get('/urls/new', (req, res) => {
   const templateVars = {
     username: req.cookies['username']
@@ -59,6 +62,7 @@ app.post('/urls', (req, res) => {
   res.redirect(`/urls/${shortURL}`);
 });
 
+// Display shortened URL page
 app.get('/urls/:id', (req, res) => {
   const templateVars = {
     username: req.cookies['username'],
@@ -68,6 +72,7 @@ app.get('/urls/:id', (req, res) => {
   res.render('urls_show', templateVars);
 });
 
+// Edit original URL for shortened URL
 app.post('/urls/:id', (req, res) => {
   const templateVars = {
     username: req.cookies['username'],
@@ -78,12 +83,14 @@ app.post('/urls/:id', (req, res) => {
   res.redirect(templateVars.shortURL);
 });
 
+// Delete URL
 app.post('/urls/:id/delete', (req, res) => {
   const shortURL = req.params.id;
   delete urlDatabase[shortURL];
   res.redirect('/urls');
 });
 
+// Redirects from shortened URL to original URL
 app.get('/u/:shortURL', (req, res) => {
   const longURL = urlDatabase[req.params.shortURL];
   res.redirect(longURL);
