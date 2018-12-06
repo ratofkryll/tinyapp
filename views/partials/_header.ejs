@@ -2,22 +2,15 @@
 
 <nav>
   <ul>
-    <li><a href="/urls">TinyURLs</a></li>
     <% if (username) { %>
+    <li><a href="/urls">TinyURLs</a></li>
     <li><a href="/urls/new">New TinyURL</a></li>
+    <form method="POST" action="/logout">
+      <span><%= username %></span>
+      <button type="submit">Logout</button>
+    </form>
+    <% } else {%>
+      <li><a href="/login">Sign In</a></li>
     <% } %>
   </ul>
 </nav>
-
-<% if (username) { %>
-  <!-- <p><a href="/urls/new">New TinyURL</a></p> -->
-  <form method="POST" action="/logout">
-    <span><%= username %></span>
-    <button type="submit">Logout</button>
-  </form>
-<% } else { %>
-  <form method="POST" action="/login">
-    <input type="text" name="userCreds">
-    <button type="submit">Login</button>
-  </form>
-<% } %>

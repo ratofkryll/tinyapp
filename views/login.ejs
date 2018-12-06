@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>TinyApp - Sign In</title>
+</head>
+<body>
+
+  <% include partials/_header %>
+
+  <h2>Sign in to TinyApp!</h2>
+
+  <form method="POST" action="/login">
+    <input type="email" name="email" /><br />
+    <input type="password" name="password" /><br />
+    <button type="submit">Sign In</button>
+  </form>
+</body>
+</html>
