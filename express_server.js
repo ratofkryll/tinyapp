@@ -38,6 +38,15 @@ function generateRandomString(urlToConvert) {
   return randomText;
 };
 
+function checkEmails(email) {
+  for (let key in users) {
+    if (email === users[key].email) {
+      return true;
+    }
+  }
+  return false;
+}
+
 // Root dir (for now redirecting to /urls)
 app.get('/', (req, res) => {
   res.redirect('/urls');
@@ -52,10 +61,19 @@ app.get('/register', (req, res) => {
 });
 
 app.post('/register', (req, res) => {
-  let userID = generateRandomString(req.body.email);
-  users[userID] = {id: userID, email: req.body.email, password: req.body.password};
-  console.log(users);
-  res.cookie('user_id', users[userID].id).redirect('/');
+  const email = req.body.email;
+  const password = req.body.password;
+
+  if (!email || !password) {
+    res.status(400).send('Please provide an email and password.')
+  } else if (checkEmails(email) === true) {
+    res.status(400).send('Email address is already taken.')
+  } else {
+    let userID = generateRandomString(email);
+    users[userID] = {id: userID, email: email, password: password};
+    console.log(users);
+    res.cookie('user_id', users[userID].id).redirect('/');
+  }
 });
 
 app.post('/login', (req, res) => {
