@@ -29,12 +29,18 @@ app.get('/', (req, res) => {
 });
 
 app.get('/urls', (req, res) => {
-  const templateVars = { urls: urlDatabase };
+  const templateVars = {
+    username: req.cookies['username'],
+    urls: urlDatabase
+  };
   res.render('urls_index', templateVars);
 });
 
 app.get('/urls/new', (req, res) => {
-  res.render('urls_new');
+  const templateVars = {
+    username: req.cookies['username']
+  }
+  res.render('urls_new', templateVars);
 });
 
 app.post('/urls', (req, res) => {
@@ -53,10 +59,13 @@ app.get('/urls/:id', (req, res) => {
 });
 
 app.post('/urls/:id', (req, res) => {
-  const shortURL = req.params.id;
-  const longURL = urlDatabase[shortURL];
-  urlDatabase[shortURL] = req.body.newURL;
-  res.redirect(shortURL);
+  const templateVars = {
+    username: req.cookies['username'],
+    shortURL: req.params.id,
+    longURL: urlDatabase[shortURL]
+  }
+  urlDatabase[templateVars.shortURL] = req.body.newURL;
+  res.redirect(templateVars.shortURL);
 });
 
 app.post('/urls/:id/delete', (req, res) => {
