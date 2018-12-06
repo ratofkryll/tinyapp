@@ -15,7 +15,7 @@ const urlDatabase = {
 // console.log(urlDatabase);
 
 function generateRandomString(urlToConvert) {
-  const randomText = '';
+  let randomText = '';
   const possibleChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
   for (let i = 0; i < 6; i++) {
@@ -26,6 +26,16 @@ function generateRandomString(urlToConvert) {
 
 app.get('/', (req, res) => {
   res.redirect('/urls');
+});
+
+app.post('/login', (req, res) => {
+  const userCreds = req.body.userCreds;
+  res.cookie('username', userCreds).redirect('/urls');
+});
+
+app.post('/logout', (req, res) => {
+  const username = req.cookies['username'];
+  res.clearCookie('username').redirect('/urls');
 });
 
 app.get('/urls', (req, res) => {
@@ -39,12 +49,12 @@ app.get('/urls', (req, res) => {
 app.get('/urls/new', (req, res) => {
   const templateVars = {
     username: req.cookies['username']
-  }
+  };
   res.render('urls_new', templateVars);
 });
 
 app.post('/urls', (req, res) => {
-  const shortURL = generateRandomString(req.body.longURL)
+  let shortURL = generateRandomString(req.body.longURL)
   urlDatabase[shortURL] = req.body.longURL;
   res.redirect(`/urls/${shortURL}`);
 });
@@ -72,11 +82,6 @@ app.post('/urls/:id/delete', (req, res) => {
   const shortURL = req.params.id;
   delete urlDatabase[shortURL];
   res.redirect('/urls');
-});
-
-app.post('/login', (req, res) => {
-  const userCreds = req.body.userCreds;
-  res.cookie('username', userCreds).redirect('/urls');
 });
 
 app.get('/u/:shortURL', (req, res) => {
