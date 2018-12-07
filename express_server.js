@@ -1,8 +1,8 @@
+// Dependencies
 const express = require('express');
 const bodyParser = require('body-parser');
 var cookieSession = require('cookie-session')
 const bcrypt = require('bcrypt');
-
 const app = express();
 const PORT = 8080;
 
@@ -17,36 +17,15 @@ app.use(cookieSession({
 }))
 app.use("/styles",express.static(__dirname + "/styles"));
 
-const users = {
-  user1id: {
-    id: 'user1id',
-    email: 'user1@email.com',
-    password: 'password'
-  },
-  user2id: {
-    id: 'user2id',
-    email: 'user2@email.com',
-    password: 'pass'
-  }
-};
+// Pseudo-database constants
 
-const urlDatabase = {
-  'b2xVn2': {
-    shortURL: 'b2xVn2',
-    longURL: 'http://www.lighthouselabs.ca',
-    userID: 'user1id'
-  },
-  '9sm5xK': {
-    shortURL: '9sm5xK',
-    longURL: 'http://www.google.com',
-    userID: 'user2id'
-  }
-};
+const users = {};
+const urlDatabase = {};
 
+// Helper functions
 function generateRandomString(urlToConvert) {
   let randomText = '';
   const possibleChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-
   for (let i = 0; i < 6; i++) {
     randomText += possibleChars.charAt(Math.floor(Math.random() * possibleChars.length));
   }
@@ -71,7 +50,9 @@ function getKey(email) {
   return false;
 }
 
-// Root dir (for now redirecting to /urls)
+// Express http handling logic
+
+// Root directory
 app.get('/', (req, res) => {
   res.redirect('/login');
 });
@@ -105,9 +86,9 @@ app.post('/register', (req, res) => {
   const hashedPassword = bcrypt.hashSync(password, 10);
 
   if (!email || !password) {
-    res.status(400).redirect('/register_error');
+    res.status(401).redirect('/register_error');
   } else if (checkEmails(email) === true) {
-    res.status(400).redirect('/register_error');
+    res.status(401).redirect('/register_error');
   } else {
     let userID = generateRandomString(email);
     users[userID] = {id: userID, email: email, password: hashedPassword};
@@ -142,14 +123,13 @@ app.post('/login', (req, res) => {
   const email = req.body.email;
   let userID = getKey(email);
 
-
   if (checkEmails(email) === false) {
-    res.redirect('/login_error');
+    res.status(401).redirect('/login_error');
   }
 
   const password = bcrypt.compareSync(req.body.password, users[userID].password);
   if (checkEmails(email) === true && password === false) {
-    res.redirect('/login_error');
+    res.status(401).redirect('/login_error');
   }
 
   if (checkEmails(email) === true && password === true) {
@@ -206,7 +186,7 @@ app.get('/urls/:id', (req, res) => {
   const templateVars = {
     user_id: req.session.user_id,
     shortURL: req.params.id,
-    longURL: urlDatabase
+    url: urlDatabase
   };
   if (urlDatabase[templateVars.shortURL]) {
   res.render('urls_show', templateVars);
@@ -220,7 +200,6 @@ app.post('/urls/:id', (req, res) => {
   const templateVars = {
     user_id: req.session.user_id,
     shortURL: req.params.id,
-    longURL: urlDatabase
   }
   if (urlDatabase[templateVars.shortURL].userID === templateVars.user_id.id) {
     urlDatabase[templateVars.shortURL].longURL = req.body.newURL;

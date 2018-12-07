@@ -16,19 +16,18 @@
       </div>
       <div class="col align-self-center main-content border rounded">
         <% include partials/_header %>
-
-        <% if (user_id && longURL[shortURL].userID === user_id.id) { %>
-        <% if (longURL[shortURL]) { %>
-          <h2>ShortURL: <%= shortURL %></h2>
-          <form class="form-group" method="POST" action="<%= shortURL %>">
-            <input class="form-control" type="text" name="newURL" value="<%= longURL[shortURL].longURL %>" size="35">
-            <div class="form-row text-center">
-              <div class="col-12">
-                <button class="btn btn-primary btn-margin" type="submit">Update</button>
+        <% if (user_id && url[shortURL].userID === user_id.id) { %>
+          <% if (url[shortURL]) { %>
+            <h2>ShortURL: <%= shortURL %></h2>
+            <form class="form-group" method="POST" action="<%= shortURL %>">
+              <input class="form-control" type="text" name="newURL" value="<%= url[shortURL].longURL %>" size="35">
+              <div class="form-row text-center">
+                <div class="col-12">
+                  <button class="btn btn-primary btn-margin" type="submit">Update</button>
+                </div>
               </div>
-            </div>
-          </form>
-        <% } %>
+            </form>
+          <% } %>
         <% } else { %>
           <h3>Only the owner of this TinyURL may view this page. Please <a href="/login">sign in</a> or <a href="/register">register</a>.</h3>
         <% } %>
