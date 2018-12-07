@@ -131,7 +131,7 @@ app.post('/login', (req, res) => {
 app.post('/logout', (req, res) => {
   const user_id = req.session.user_id;
   req.session.user_id = null;
-  res.clearCookie('user_id').redirect('/');
+  res.redirect('/');
 });
 
 // Display /urls
