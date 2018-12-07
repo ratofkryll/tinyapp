@@ -58,6 +58,15 @@ function checkEmails(email) {
   return false;
 }
 
+function getKey(email) {
+  for (let key in users) {
+    if (email === users[key].email) {
+      return key;
+    }
+  }
+  return false;
+}
+
 // Root dir (for now redirecting to /urls)
 app.get('/', (req, res) => {
   res.redirect('/urls');
@@ -83,7 +92,6 @@ app.post('/register', (req, res) => {
   } else {
     let userID = generateRandomString(email);
     users[userID] = {id: userID, email: email, password: hashedPassword};
-    console.log(users[userID]);
     res.cookie('user_id', users[userID].id).redirect('/');
   }
 });
@@ -97,18 +105,10 @@ app.get('/login', (req, res) => {
 
 app.post('/login', (req, res) => {
   const email = req.body.email;
-  const password = req.body.password;
-  let userID = '';
-  function checkPasswords(password) {
-    for (let key in users) {
-      if (password === users[key].password) {
-        userID = key;
-        return true;
-      }
-    }
-    return false;
-  }
-  if (checkEmails(email) === true && checkPasswords(password) === true) {
+  let userID = getKey(email);
+  const password = bcrypt.compareSync(req.body.password, users[userID].password);
+
+  if (checkEmails(email) === true && password === true) {
     res.cookie('user_id', users[userID]).redirect('/urls');
   } else {
     res.send('Username or password incorrect.');
