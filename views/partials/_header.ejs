@@ -1,17 +1,17 @@
 <h1>TinyApp</h1>
 
 <nav>
-  <ul>
+  <ul class="nav">
     <% if (user_id) { %>
-    <li><a href="/urls">TinyURLs</a></li>
-    <li><a href="/urls/new">New TinyURL</a></li>
+    <li class="nav-item"><a class="nav-link" href="/urls">TinyURLs</a></li>
+    <li class="nav-item"><a class="nav-link" href="/urls/new">New TinyURL</a></li>
     <form method="POST" action="/logout">
       <span><%= user_id.email %></span>
       <button type="submit">Logout</button>
     </form>
     <% } else {%>
-      <li><a href="/login">Sign In</a></li>
-      <li><a href="/register">Register</a></li>
+      <li class="nav-item"><a class="nav-link" href="/login">Sign In</a></li>
+      <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
     <% } %>
   </ul>
 </nav>
