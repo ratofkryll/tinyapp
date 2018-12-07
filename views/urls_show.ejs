@@ -6,7 +6,7 @@
 <body>
   <% include partials/_header %>
 
-    <% if (longURL[shortURL].userID === user_id.id) { %>
+    <% if (user_id && longURL[shortURL].userID === user_id.id) { %>
       <% if (longURL[shortURL]) { %>
         <h2>ShortURL: <%= shortURL %></h2>
         <form method="POST" action="<%= shortURL %>">
@@ -15,7 +15,7 @@
         </form>
       <% } %>
     <% } else { %>
-      <p>Only the owner of this TinyURL may view this page. Please sign in or register.</p>
+      <h3>Only the owner of this TinyURL may view this page. Please <a href="/login">sign in</a> or <a href="/register">register</a>.</h3>
     <% } %>
 
 </body>

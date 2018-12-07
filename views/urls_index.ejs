@@ -6,16 +6,20 @@
 <body>
   <% include partials/_header %>
   <ul>
-    <% for (let url in urls) { %>
-      <% if (urls[url].userID === user_id.id) { %>
-        <li>
-          <%= `http://localhost:8080/u/${url} | ${urls[url].longURL}` %>
-          <form method="POST" action="/urls/<%= url %>/delete">
-            <a href="/urls/<%= url %>">Edit</a>
-            <button type="submit">Delete</button>
-          </form>
-        </li>
+    <% if (user_id) { %>
+      <% for (let url in urls) { %>
+        <% if (urls[url].userID === user_id.id) { %>
+          <li>
+            <%= `http://localhost:8080/u/${url} | ${urls[url].longURL}` %>
+            <form method="POST" action="/urls/<%= url %>/delete">
+              <a href="/urls/<%= url %>">Edit</a>
+              <button type="submit">Delete</button>
+            </form>
+          </li>
+        <% } %>
       <% } %>
+    <% } else { %>
+      <h3>Please <a href="/login">sign in</a> or <a href="/register">register</a> to view your TinyURLs.</h3>
     <% } %>
     </ul>
 </body>

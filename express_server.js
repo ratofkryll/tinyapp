@@ -75,7 +75,7 @@ function getKey(email) {
 
 // Root dir (for now redirecting to /urls)
 app.get('/', (req, res) => {
-  res.redirect('/urls');
+  res.redirect('/login');
 });
 
 // Register, login & logout
@@ -83,7 +83,11 @@ app.get('/register', (req, res) => {
   const templateVars = {
     user_id: req.session.user_id,
   };
-  res.render('register', templateVars);
+  if (templateVars.user_id) {
+    res.redirect('/urls');
+  } else {
+    res.render('register', templateVars);
+  }
 });
 
 app.post('/register', (req, res) => {
@@ -99,7 +103,7 @@ app.post('/register', (req, res) => {
     let userID = generateRandomString(email);
     users[userID] = {id: userID, email: email, password: hashedPassword};
     req.session.user_id = users[userID];
-    res.redirect('/');
+    res.redirect('/urls');
   }
 });
 
@@ -107,7 +111,11 @@ app.get('/login', (req, res) => {
   const templateVars = {
     user_id: req.session.user_id,
   };
+  if (templateVars.user_id) {
+    res.redirect('/urls');
+  } else {
   res.render('login', templateVars);
+};
 });
 
 app.post('/login', (req, res) => {
@@ -126,7 +134,7 @@ app.post('/login', (req, res) => {
 app.post('/logout', (req, res) => {
   const user_id = req.session.user_id;
   req.session.user_id = null;
-  res.clearCookie('user_id').redirect('/urls');
+  res.clearCookie('user_id').redirect('/');
 });
 
 // Display /urls
@@ -135,11 +143,7 @@ app.get('/urls', (req, res) => {
     user_id: req.session.user_id,
     urls: urlDatabase
   };
-  if (templateVars.user_id) {
     res.render('urls_index', templateVars);
-  } else {
-    res.redirect('login');
-  }
 });
 
 // Add new URL to urlDatabase
@@ -150,7 +154,7 @@ app.get('/urls/new', (req, res) => {
   if (templateVars.user_id) {
     res.render('urls_new', templateVars);
   } else {
-    res.redirect('register');
+    res.redirect('/login');
   }
 });
 
@@ -158,9 +162,14 @@ app.post('/urls', (req, res) => {
   const templateVars = {
     user_id: req.session.user_id
   };
-  let shortURL = generateRandomString(req.body.longURL)
-  urlDatabase[shortURL] = {shortURL: shortURL, longURL: req.body.longURL, userID: templateVars.user_id.id};
-  res.redirect(`/urls/${shortURL}`);
+
+  if (templateVars) {
+    let shortURL = generateRandomString(req.body.longURL)
+    urlDatabase[shortURL] = {shortURL: shortURL, longURL: req.body.longURL, userID: templateVars.user_id.id};
+    res.redirect('/urls');
+  } else {
+    res.redirect('/login')
+  }
 });
 
 // Display shortened URL page
@@ -170,7 +179,11 @@ app.get('/urls/:id', (req, res) => {
     shortURL: req.params.id,
     longURL: urlDatabase
   };
+  if (urlDatabase[templateVars.shortURL]) {
   res.render('urls_show', templateVars);
+  } else {
+    res.status(404).render('404', templateVars);
+  }
 });
 
 // Edit original URL for shortened URL
@@ -203,13 +216,20 @@ app.post('/urls/:id/delete', (req, res) => {
 });
 
 // Redirects from shortened URL to original URL
-app.get('/u/:shortURL', (req, res) => {
-  const longURL = urlDatabase[req.params.shortURL].shortURL;
-  res.redirect(longURL);
+app.get('/u/:id', (req, res) => {
+  const templateVars = {
+    user_id: req.session.user_id,
+  }
+  const url = urlDatabase[req.params.id].longURL;
+  res.redirect(url);
 });
 
-app.get('/urls.json', (req, res) => {
-  res.json(urlDatabase);
+// Displays 404 page if the URL does not exist
+app.get('*', (req, res) => {
+  const templateVars = {
+    user_id: req.session.user_id,
+  }
+  res.status(404).render('404', templateVars);
 });
 
 app.listen(PORT, () => {
