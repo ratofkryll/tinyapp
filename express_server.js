@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 const app = express();
 const PORT = 8080;
 
-const password = "purple-monkey-dinosaur";
+const password = '';
 const hashedPassword = bcrypt.hashSync(password, 10);
 
 app.set('view engine', 'ejs');
@@ -74,6 +74,7 @@ app.get('/register', (req, res) => {
 app.post('/register', (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
+  const hashedPassword = bcrypt.hashSync(password, 10);
 
   if (!email || !password) {
     res.status(400).send('Please provide an email and password.')
@@ -81,7 +82,8 @@ app.post('/register', (req, res) => {
     res.status(400).send('Email address is already taken.')
   } else {
     let userID = generateRandomString(email);
-    users[userID] = {id: userID, email: email, password: password};
+    users[userID] = {id: userID, email: email, password: hashedPassword};
+    console.log(users[userID]);
     res.cookie('user_id', users[userID].id).redirect('/');
   }
 });
