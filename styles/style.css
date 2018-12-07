@@ -1,0 +1,33 @@
+h2, h3 {
+  margin: 10px 10px 20px 10px;
+}
+
+.main-content {
+  margin-top: 12%;
+  padding: 30px 50px 20px 50px;
+}
+
+.app-text {
+  color: #007bff;
+}
+
+.url-content {
+  margin-top: 15px;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+.url-list {
+  list-style-type: none;
+  padding-top: 7px;
+  padding-bottom: 10px;
+  padding-left: 0;
+  margin-bottom: 15px;
+}
+
+.btn-margin {
+  margin-top: 5px;
+}

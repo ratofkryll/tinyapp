@@ -6,23 +6,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <!-- /Bootstrap 4 reqs -->
+    <link rel="stylesheet" type="text/css" href="/styles/style.css">
     <title>TinyApp - <%= shortURL %></title>
   </head>
   <body>
-    <% include partials/_header %>
+    <div class ="container">
+      <div class="row align-items-center">
+      <div class="col">
+      </div>
+      <div class="col align-self-center main-content border rounded">
+        <% include partials/_header %>
 
-    <% if (user_id && longURL[shortURL].userID === user_id.id) { %>
-      <% if (longURL[shortURL]) { %>
-        <h2>ShortURL: <%= shortURL %></h2>
-        <form method="POST" action="<%= shortURL %>">
-          <input type="text" name="newURL" value="<%= longURL[shortURL].longURL %>" size="35">
-          <button type="submit">Update</button>
-        </form>
-      <% } %>
-    <% } else { %>
-      <h3>Only the owner of this TinyURL may view this page. Please <a href="/login">sign in</a> or <a href="/register">register</a>.</h3>
-    <% } %>
-
+        <% if (user_id && longURL[shortURL].userID === user_id.id) { %>
+        <% if (longURL[shortURL]) { %>
+          <h2>ShortURL: <%= shortURL %></h2>
+          <form class="form-group" method="POST" action="<%= shortURL %>">
+            <input class="form-control" type="text" name="newURL" value="<%= longURL[shortURL].longURL %>" size="35">
+            <div class="form-row text-center">
+              <div class="col-12">
+                <button class="btn btn-primary btn-margin" type="submit">Update</button>
+              </div>
+            </div>
+          </form>
+        <% } %>
+        <% } else { %>
+          <h3>Only the owner of this TinyURL may view this page. Please <a href="/login">sign in</a> or <a href="/register">register</a>.</h3>
+        <% } %>
+      </div>
+      <div class="col">
+      </div>
+      </div>
+    </div>
     <!-- Bootsrap 4 JS reqs -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>

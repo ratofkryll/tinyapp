@@ -6,29 +6,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <!-- /Bootstrap 4 reqs -->
+    <link rel="stylesheet" type="text/css" href="/styles/style.css">
     <title>TinyApp - TinyURLs</title>
   </head>
   <body>
-    <% include partials/_header %>
-
-    <ul>
-      <% if (user_id) { %>
-        <% for (let url in urls) { %>
-          <% if (urls[url].userID === user_id.id) { %>
-            <li>
-              <%= `http://localhost:8080/u/${url} | ${urls[url].longURL}` %>
-              <form method="POST" action="/urls/<%= url %>/delete">
-                <a href="/urls/<%= url %>">Edit</a>
-                <button type="submit">Delete</button>
-              </form>
-            </li>
-          <% } %>
-        <% } %>
-      <% } else { %>
-        <h3>Please <a href="/login">sign in</a> or <a href="/register">register</a> to view your TinyURLs.</h3>
-      <% } %>
-      </ul>
-
+    <div class ="container">
+      <div class="row align-items-center">
+        <div class="col">
+        </div>
+        <div class="col align-self-center main-content border rounded">
+          <% include partials/_header %>
+            <div class="url-content">
+              <ul>
+                <% if (user_id) { %>
+                  <% for (let url in urls) { %>
+                    <% if (urls[url].userID === user_id.id) { %>
+                      <li class="url-list border-top border-bottom">
+                      <%= `http://localhost:8080/u/${url} | ${urls[url].longURL}` %>
+                        <form method="POST" action="/urls/<%= url %>/delete">
+                          <a href="/urls/<%= url %>" class="btn btn-primary btn-sm">Edit</a>
+                          <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+                        </form>
+                      </li>
+                    <% } %>
+                  <% } %>
+                <% } else { %>
+                <h3>Please <a href="/login">sign in</a> or <a href="/register">register</a> to view your TinyURLs.</h3>
+                <% } %>
+              </ul>
+            </div>
+          </div>
+          <div class="col">
+          </div>
+          </div>
+          </div>
       <!-- Bootsrap 4 JS reqs -->
       <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>

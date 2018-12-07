@@ -15,6 +15,7 @@ app.use(cookieSession({
   // Cookie Options
   maxAge: 24 * 60 * 60 * 1000 // 24 hours
 }))
+app.use("/styles",express.static(__dirname + "/styles"));
 
 const users = {
   user1id: {
