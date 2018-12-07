@@ -19,11 +19,19 @@ const users = {
     email: 'user2@email.com',
     password: 'pass'
   }
-}
+};
 
 const urlDatabase = {
-  'b2xVn2': 'http://www.lighthouselabs.ca',
-  '9sm5xK': 'http://www.google.com'
+  'b2xVn2': {
+    shortURL: 'b2xVn2',
+    longURL: 'http://www.lighthouselabs.ca',
+    userID: 'user1id'
+  },
+  '9sm5xK': {
+    shortURL: '9sm5xK',
+    longURL: 'http://www.google.com',
+    userID: 'user2id'
+  }
 };
 
 function generateRandomString(urlToConvert) {
@@ -111,7 +119,11 @@ app.get('/urls', (req, res) => {
     user_id: req.cookies['user_id'],
     urls: urlDatabase
   };
-  res.render('urls_index', templateVars);
+  if (templateVars.user_id) {
+    res.render('urls_index', templateVars);
+  } else {
+    res.redirect('login');
+  }
 });
 
 // Add new URL to urlDatabase
@@ -127,8 +139,11 @@ app.get('/urls/new', (req, res) => {
 });
 
 app.post('/urls', (req, res) => {
+  const templateVars = {
+    user_id: req.cookies['user_id']
+  };
   let shortURL = generateRandomString(req.body.longURL)
-  urlDatabase[shortURL] = req.body.longURL;
+  urlDatabase[shortURL] = {shortURL: shortURL, longURL: req.body.longURL, userID: templateVars[user_id].id};
   res.redirect(`/urls/${shortURL}`);
 });
 
@@ -147,22 +162,34 @@ app.post('/urls/:id', (req, res) => {
   const templateVars = {
     user_id: req.cookies['user_id'],
     shortURL: req.params.id,
-    longURL: urlDatabase[shortURL]
+    longURL: urlDatabase
   }
-  urlDatabase[templateVars.shortURL] = req.body.newURL;
-  res.redirect(templateVars.shortURL);
+  if (urlDatabase[templateVars.shortURL].userID === templateVars.user_id.id) {
+    urlDatabase[templateVars.shortURL].longURL = req.body.newURL;
+    res.redirect('/urls');
+  } else {
+    res.send('Only the owner can edit this TinyURL.')
+  }
 });
 
 // Delete URL
 app.post('/urls/:id/delete', (req, res) => {
-  const shortURL = req.params.id;
-  delete urlDatabase[shortURL];
-  res.redirect('/urls');
+  const templateVars = {
+    user_id: req.cookies['user_id'],
+    shortURL: req.params.id,
+    longURL: urlDatabase
+  }
+    if (longURL[templateVars.shortURL].userID === templateVars.user_id.id) {
+    delete urlDatabase[shortURL];
+    res.redirect('/urls');
+  } else {
+    res.send('Only the owner can delete this TinyURL.')
+  }
 });
 
 // Redirects from shortened URL to original URL
 app.get('/u/:shortURL', (req, res) => {
-  const longURL = urlDatabase[req.params.shortURL];
+  const longURL = urlDatabase[req.params.shortURL].shortURL;
   res.redirect(longURL);
 });
 

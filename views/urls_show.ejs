@@ -6,12 +6,17 @@
 <body>
   <% include partials/_header %>
 
-  <% if (longURL[shortURL]) { %>
-    <h2>ShortURL: <%= shortURL %></h2>
-    <form method="POST" action="<%= shortURL %>">
-      <input type="text" name="newURL" value="<%= longURL[shortURL] %>" size="35">
-      <button type="submit">Update</button>
-    </form>
-  <% } %>
+    <% if (longURL[shortURL].userID === user_id.id) { %>
+      <% if (longURL[shortURL]) { %>
+        <h2>ShortURL: <%= shortURL %></h2>
+        <form method="POST" action="<%= shortURL %>">
+          <input type="text" name="newURL" value="<%= longURL[shortURL].longURL %>" size="35">
+          <button type="submit">Update</button>
+        </form>
+      <% } %>
+    <% } else { %>
+      <p>Only the owner of this TinyURL may view this page. Please sign in or register.</p>
+    <% } %>
+
 </body>
 </html>

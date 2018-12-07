@@ -7,13 +7,15 @@
   <% include partials/_header %>
   <ul>
     <% for (let url in urls) { %>
-      <li>
-        <%= `${url} | ${urls[url]}` %>
-        <form method="POST" action="/urls/<%= url %>/delete">
-          <a href="urls/<%= url %>">Edit</a>
-          <button type="submit">Delete</button>
-        </form>
-      </li>
+      <% if (urls[url].userID === user_id.id) { %>
+        <li>
+          <%= `http://localhost:8080/u/${url} | ${urls[url].longURL}` %>
+          <form method="POST" action="/urls/<%= url %>/delete">
+            <a href="/urls/<%= url %>">Edit</a>
+            <button type="submit">Delete</button>
+          </form>
+        </li>
+      <% } %>
     <% } %>
     </ul>
 </body>
