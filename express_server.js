@@ -105,6 +105,17 @@ app.post('/register', (req, res) => {
   }
 });
 
+app.get('/login_error', (req, res) => {
+  const templateVars = {
+    user_id: req.session.user_id,
+  };
+  if (templateVars.user_id) {
+    res.redirect('/urls');
+  } else {
+    res.render('login_error', templateVars);
+  };
+});
+
 app.get('/login', (req, res) => {
   const templateVars = {
     user_id: req.session.user_id,
@@ -112,14 +123,23 @@ app.get('/login', (req, res) => {
   if (templateVars.user_id) {
     res.redirect('/urls');
   } else {
-  res.render('login', templateVars);
-};
+    res.render('login', templateVars);
+  };
 });
 
 app.post('/login', (req, res) => {
   const email = req.body.email;
   let userID = getKey(email);
+
+
+  if (checkEmails(email) === false) {
+    res.redirect('/login_error');
+  }
+
   const password = bcrypt.compareSync(req.body.password, users[userID].password);
+  if (checkEmails(email) === true && password === false) {
+    res.redirect('/login_error');
+  }
 
   if (checkEmails(email) === true && password === true) {
     req.session.user_id = users[userID];
