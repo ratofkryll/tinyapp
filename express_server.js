@@ -77,6 +77,17 @@ app.get('/', (req, res) => {
 });
 
 // Register, login & logout
+app.get('/register_error', (req, res) => {
+  const templateVars = {
+    user_id: req.session.user_id,
+  };
+  if (templateVars.user_id) {
+    res.redirect('/urls');
+  } else {
+    res.render('register_error', templateVars);
+  };
+});
+
 app.get('/register', (req, res) => {
   const templateVars = {
     user_id: req.session.user_id,
@@ -94,9 +105,9 @@ app.post('/register', (req, res) => {
   const hashedPassword = bcrypt.hashSync(password, 10);
 
   if (!email || !password) {
-    res.status(400).send('Please provide an email and password.')
+    res.status(400).redirect('/register_error');
   } else if (checkEmails(email) === true) {
-    res.status(400).send('Email address is already taken.')
+    res.status(400).redirect('/register_error');
   } else {
     let userID = generateRandomString(email);
     users[userID] = {id: userID, email: email, password: hashedPassword};
