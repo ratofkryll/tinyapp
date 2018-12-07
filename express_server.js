@@ -1,8 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const bcrypt = require('bcrypt');
+
 const app = express();
 const PORT = 8080;
+
+const password = "purple-monkey-dinosaur";
+const hashedPassword = bcrypt.hashSync(password, 10);
 
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
