@@ -6,9 +6,6 @@ const bcrypt = require('bcrypt');
 const app = express();
 const PORT = 8080;
 
-const password = '';
-const hashedPassword = bcrypt.hashSync(password, 10);
-
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieSession({
@@ -205,7 +202,7 @@ app.post('/urls/:id', (req, res) => {
 app.post('/urls/:id/delete', (req, res) => {
   const templateVars = {
     user_id: req.session.user_id,
-    shortURL: req.params.id,
+    shortURL: req.params.id
   }
     if (urlDatabase[templateVars.shortURL].userID === templateVars.user_id.id) {
     delete urlDatabase[templateVars.shortURL];
@@ -218,9 +215,10 @@ app.post('/urls/:id/delete', (req, res) => {
 // Redirects from shortened URL to original URL
 app.get('/u/:id', (req, res) => {
   const templateVars = {
-    user_id: req.session.user_id,
-  }
-  const url = urlDatabase[req.params.id].longURL;
+    user_id: req.session.user_id
+  };
+  const shortURL = req.params.id;
+  const url = (urlDatabase[shortURL] || {longURL: '/notFound'}).longURL;
   res.redirect(url);
 });
 
