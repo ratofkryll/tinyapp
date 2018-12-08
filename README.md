@@ -6,7 +6,10 @@ CSS styling was done with the help of [Bootstrap 4](https://getbootstrap.com/doc
 
 ## Final Product
 
-SCREENSHOTS GO HERE
+![Screenshot of register page](https://github.com/ratofkryll/tinyapp/blob/master/docs/register.png?raw=true)
+![Screenshot of new URL page](https://github.com/ratofkryll/tinyapp/blob/master/docs/new-url.png?raw=true)
+![Screenshot of edit URL page](https://github.com/ratofkryll/tinyapp/blob/master/docs/edit-url.png?raw=true)
+![Screenshot of URL index](https://github.com/ratofkryll/tinyapp/blob/master/docs/urls-index.png?raw=true)
 
 ## Dependencies
 
