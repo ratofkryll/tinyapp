@@ -1,7 +1,7 @@
 // Dependencies
 const express = require('express');
 const bodyParser = require('body-parser');
-var cookieSession = require('cookie-session')
+const cookieSession = require('cookie-session')
 const bcrypt = require('bcrypt');
 const app = express();
 const PORT = 8080;
@@ -18,7 +18,6 @@ app.use(cookieSession({
 app.use("/styles",express.static(__dirname + "/styles"));
 
 // Pseudo-database constants
-
 const users = {};
 const urlDatabase = {};
 
